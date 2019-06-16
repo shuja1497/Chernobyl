@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 
+private const val TEXT_CONTENT = "TextContent"
 class MainActivity : AppCompatActivity() {
 
     private var textView: TextView? = null
@@ -30,5 +31,18 @@ class MainActivity : AppCompatActivity() {
                 userInput.setText("")
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        outState?.putString(TEXT_CONTENT, textView?.text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        val savedString = savedInstanceState?.getString(TEXT_CONTENT, "")
+        textView?.text = savedString
     }
 }
