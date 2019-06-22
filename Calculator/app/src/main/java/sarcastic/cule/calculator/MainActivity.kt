@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.NumberFormatException
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         val button7 = findViewById<Button>(R.id.button7)
         val button8 = findViewById<Button>(R.id.button8)
         val button9 = findViewById<Button>(R.id.button9)
-        val buttonDot = findViewById<Button>(R.id.buttonDecimal)
+        val buttonDecimal = findViewById<Button>(R.id.buttonDecimal)
 
         val buttonAdd       = findViewById<Button>(R.id.buttonAdd)
         val buttonMinus     = findViewById<Button>(R.id.buttonMinus)
@@ -62,10 +62,12 @@ class MainActivity : AppCompatActivity() {
 
         val opListener = View.OnClickListener { v->
             val op = (v as Button).text.toString()
-            val value  = newNumber.text.toString()
 
-            if(value.isNotEmpty()){
+            try {
+                val value  = newNumber.text.toString().toDouble()
                 performOperation(op, value)
+            } catch (e: NumberFormatException){
+                newNumber.setText("")
             }
             pendingOperation = op
             displayOperation.text = pendingOperation
@@ -78,11 +80,11 @@ class MainActivity : AppCompatActivity() {
         buttonEqual   .setOnClickListener(opListener)
     }
 
-    private fun performOperation(op: String, value: String) {
+    private fun performOperation(op: String, value: Double) {
         if(operand1 == null){
-            operand1 = value.toDouble()
+            operand1 = value
         }else{
-            operand2 = value.toDouble()
+            operand2 = value
 
             if(pendingOperation == "="){
                 pendingOperation = op
@@ -95,10 +97,10 @@ class MainActivity : AppCompatActivity() {
 
                 "-"-> operand1 = operand1!! - operand2
 
-                "/"-> if(operand2 == 0.0){
-                    operand1 = Double.NaN
+                "/"-> operand1 = if(operand2 == 0.0){
+                    Double.NaN
                 }else{
-                    operand1 = operand1!! / operand2
+                    operand1!! / operand2
                 }
 
                 "*"-> operand1 = operand1!! * operand2
