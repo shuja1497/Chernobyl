@@ -8,6 +8,11 @@ import android.widget.EditText
 import android.widget.TextView
 import java.lang.NumberFormatException
 
+
+private const val PENDING_OPERATION = "PendingOperation"
+private const val RESULT = "Result"
+private const val NEW_NUMBER = "NewNumber"
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var result: EditText
@@ -109,5 +114,35 @@ class MainActivity : AppCompatActivity() {
 
         result.setText(operand1.toString())
         newNumber.setText("")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+
+        outState?.putString(PENDING_OPERATION, pendingOperation)
+        if(result.text!=null) {
+            outState?.putString(RESULT, result.text.toString())
+        }
+        if(newNumber.text!=null) {
+            outState?.putString(NEW_NUMBER, newNumber.text.toString())
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        if (savedInstanceState!=null){
+            pendingOperation = savedInstanceState.getString(PENDING_OPERATION)!!
+            displayOperation.text = pendingOperation
+            if(savedInstanceState.getString(RESULT)!=null) {
+                result.setText(savedInstanceState.getString(RESULT)!!)
+                operand1 = savedInstanceState.getString(RESULT)!!.toDouble()
+            }else{
+                operand1 = null
+            }
+            if (savedInstanceState.getString(NEW_NUMBER)!=null) {
+                newNumber.setText(savedInstanceState.getString(NEW_NUMBER)!!)
+            }
+        }
     }
 }
