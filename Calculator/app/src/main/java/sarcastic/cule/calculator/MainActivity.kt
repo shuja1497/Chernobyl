@@ -52,6 +52,20 @@ class MainActivity : AppCompatActivity() {
             operation.text = pendingOperation
         }
 
+        buttonNeg.setOnClickListener {
+            val value = newNumber.text.toString()
+            if(value.isEmpty()){
+                newNumber.setText("-")
+            }else{
+                try {
+                    val doubleValue = value.toDouble() * -1
+                    newNumber.setText(doubleValue.toString())
+                } catch (e: NumberFormatException){
+                    newNumber.setText("")
+                }
+            }
+        }
+
         buttonAdd     .setOnClickListener(opListener)
         buttonMinus   .setOnClickListener(opListener)
         buttonMultiply.setOnClickListener(opListener)
