@@ -6,6 +6,23 @@ import android.os.Bundle
 import android.util.Log
 import java.net.URL
 
+class FeedEntry {
+    var name: String = ""
+    var artist: String = ""
+    var imageURL: String = ""
+    var summary: String = ""
+    var releaseDate: String = ""
+
+    override fun toString(): String {
+        return """
+            name : $name
+            artist : $artist
+            release Date : $releaseDate
+            image url : $imageURL
+        """.trimIndent()
+    }
+}
+
 class MainActivity : AppCompatActivity() {
 
     private val TAG = "MainActivity"
@@ -17,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate")
 
         val downloadData = DownloadData()
-        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml")
+        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topMovies/xml")
         Log.d(TAG, "onCreate done")
     }
 
@@ -36,10 +53,12 @@ class MainActivity : AppCompatActivity() {
                 return rssFeed
             }
 
-            override fun onPostExecute(result: String?) {
+            override fun onPostExecute(result: String) {
                 // runs in the main thread
                 super.onPostExecute(result)
-                Log.d(TAG, "onPostExecute: parameter is $result")
+//                Log.d(TAG, "onPostExecute: parameter is $result")
+                val parseApplications = ParseApplications()
+                parseApplications.parse(result)
             }
 
             private fun downloadXML(urlPath: String?): String {
