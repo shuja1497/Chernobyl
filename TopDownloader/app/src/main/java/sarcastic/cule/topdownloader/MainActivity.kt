@@ -78,9 +78,11 @@ class MainActivity : AppCompatActivity() {
                 val parseApplications = ParseApplications()
                 parseApplications.parse(result)
 
-                val arrayAdapter = ArrayAdapter(context, R.layout.list_item, parseApplications.applications)
-                listView.adapter = arrayAdapter
+//                val arrayAdapter = ArrayAdapter(context, R.layout.list_item, parseApplications.applications)
+//                listView.adapter = arrayAdapter
 
+                val feedAdapter = FeedAdapter(context, R.layout.list_record, parseApplications.applications)
+                listView.adapter = feedAdapter
                 
             }
 
