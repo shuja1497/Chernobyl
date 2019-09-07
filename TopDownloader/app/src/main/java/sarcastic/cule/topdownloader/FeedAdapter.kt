@@ -8,6 +8,15 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
+class ViewHolder(view: View) {
+
+    val tvName = view.findViewById<TextView>(R.id.tvName)
+    val tvArtist = view.findViewById<TextView>(R.id.tvArtist)
+    val tvSummary = view.findViewById<TextView>(R.id.tvSummary)
+
+}
+
+
 class FeedAdapter(context: Context, private val resource: Int, private val applications : List<FeedEntry>)
     : ArrayAdapter<FeedEntry>(context, resource) {
 
@@ -23,23 +32,24 @@ class FeedAdapter(context: Context, private val resource: Int, private val appli
 
         Log.d(TAG, "getView() called")
         val view: View
-        view = if (convertView == null) {
+        val viewHolder: ViewHolder
+
+        if (convertView == null) {
             Log.d(TAG, "getView() called with null convertView")
-            inflater.inflate(resource, parent, false)
+            view = inflater.inflate(resource, parent, false)
+            viewHolder = ViewHolder(view)
+            view.tag = viewHolder
         } else {
             Log.d(TAG, "getView() provided a convertView")
-            convertView
+            view = convertView
+            viewHolder = view.tag as ViewHolder
         }
-
-        val tvName = view.findViewById<TextView>(R.id.tvName)
-        val tvArtist = view.findViewById<TextView>(R.id.tvArtist)
-        val tvSummary = view.findViewById<TextView>(R.id.tvSummary)
 
         val currentApp = applications[position]
 
-        tvName.text = currentApp.name
-        tvArtist.text = currentApp.artist
-        tvSummary.text = currentApp.summary
+        viewHolder.tvName.text = currentApp.name
+        viewHolder.tvArtist.text = currentApp.artist
+        viewHolder.tvSummary.text = currentApp.summary
 
         return view
     }
