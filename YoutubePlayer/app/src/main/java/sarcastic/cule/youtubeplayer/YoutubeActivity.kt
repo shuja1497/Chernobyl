@@ -1,5 +1,6 @@
 package sarcastic.cule.youtubeplayer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ const val YOUTUBE_PLAYLIST = "PLyZN0wNRZyr1gBnaRwGFDiG-4tPPlla6O"
 
 class YoutubeActivity : YouTubeBaseActivity() , YouTubePlayer.OnInitializedListener{
 
+    private val DIALOG_REQUEST_CODE = 1
     private val TAG = "YoutubeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,10 +67,8 @@ class YoutubeActivity : YouTubeBaseActivity() , YouTubePlayer.OnInitializedListe
         youTubeInitializationResult : YouTubeInitializationResult?
     ) {
 
-        val REQUEST_CODE = 0
-
         if (youTubeInitializationResult?.isUserRecoverableError == true) {
-            youTubeInitializationResult.getErrorDialog(this, REQUEST_CODE).show()
+            youTubeInitializationResult.getErrorDialog(this, DIALOG_REQUEST_CODE).show()
         } else {
             val errorMessage  = "unable to initialize youtubePlayer $youTubeInitializationResult"
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
@@ -118,6 +118,17 @@ class YoutubeActivity : YouTubeBaseActivity() , YouTubePlayer.OnInitializedListe
         override fun onError(p0: YouTubePlayer.ErrorReason?) {
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        Log.d(TAG, "onActivityResult called with response code $resultCode for request $requestCode")
+
+        if (requestCode == DIALOG_REQUEST_CODE) {
+            Log.d(TAG, "${intent?.toString()}")
+            Log.d(TAG, "${intent?.extras?.toString()}")
+
+        }
     }
 
 }
