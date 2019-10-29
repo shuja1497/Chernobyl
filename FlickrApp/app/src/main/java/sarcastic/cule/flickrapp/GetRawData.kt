@@ -12,13 +12,19 @@ enum class DownloadStatus {
 }
 
 
-class GetRawData : AsyncTask<String, Void, String>() {
+class GetRawData(private val listener: OnDownloadComplete) : AsyncTask<String, Void, String>() {
 
     private val TAG = "GetRawData"
     private var downloadstatus  = DownloadStatus.IDLE
 
-    override fun onPostExecute(result: String?) {
+
+    interface OnDownloadComplete {
+        fun onDownloadComplete(data: String, status: DownloadStatus)
+    }
+
+    override fun onPostExecute(result: String) {
         Log.d(TAG, "onPostExecute called with paramters: $result")
+        listener.onDownloadComplete(result, downloadstatus)
     }
 
     override fun doInBackground(vararg params: String?): String {
